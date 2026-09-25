@@ -1,0 +1,72 @@
+/* Переменные */
+:root {
+    --moss: #5B6B3A;
+    --honey: #D9A441;
+    --cream: #f5EFE3;
+    --text: #2E2A24;
+
+    --font-heading: 'Cormotant Garamond', serif;
+    --font-body: 'Manrope', sans-serif;
+}
+
+/*Сброс*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--cream);
+    color: var(--text);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/*Шапка*/
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+}
+
+.logo {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--moss);
+}
+
+nav ul {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+}
+
+nav a:hover {
+    color: var(--honey);
+}
+
+.header-actions{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn {
+    background-color: var(--honey);
+    color:  var(--text);
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.btn:hover {
+    color: var(--cream);
+    background-color: var(--moss);
+}
