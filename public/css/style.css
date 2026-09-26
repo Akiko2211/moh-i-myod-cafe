@@ -51,11 +51,12 @@ nav ul {
 nav a {
     transition: color 0.3s ease;
 }
+
 nav a:hover {
     color: var(--honey);
 }
 
-.header-actions{
+.header-actions {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -63,9 +64,10 @@ nav a:hover {
 
 .btn {
     background-color: var(--honey);
-    color:  var(--text);
+    color: var(--text);
     padding: 12px 24px;
     border-radius: 999px;
+    border: 2px solid transparent;
     font-weight: 500;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -73,4 +75,57 @@ nav a:hover {
 .btn:hover {
     color: var(--cream);
     background-color: var(--moss);
+}
+
+
+
+/* Гавный экран */
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    align-items: center;
+    gap: 48 px;
+    padding: 40px 40px 80px;
+}
+
+.hero-label {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 14px;
+    color: var(--moss);
+    margin-bottom: 16px;
+}
+
+.hero h1 {
+    font-family: var(--font-heading);
+    font-size: 96px;
+    line-height: 1;
+    color: var(--moss);
+    margin-bottom: 24px;
+}
+
+.hero-description{
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 420px;
+    margin-bottom: 32px;
+}
+
+.hero-buttons{
+    display: flex;
+    gap: 16px;
+}
+
+.btn-outline{
+    background-color: transparent;
+    border-color:  var(--moss);
+    color: var(--moss);
+}
+
+.hero-image img{
+    display: block;
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    border-radius: 32px;
 }
