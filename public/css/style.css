@@ -4,6 +4,7 @@
     --honey: #D9A441;
     --cream: #f5EFE3;
     --text: #2E2A24;
+    --card: #FFFDF8;
 
     --font-heading: 'Cormorant Garamond', serif;
     --font-body: 'Manrope', sans-serif;
@@ -84,7 +85,7 @@ nav a:hover {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
     align-items: center;
-    gap: 48 px;
+    gap: 48px;
     padding: 40px 40px 80px;
 }
 
@@ -128,4 +129,87 @@ nav a:hover {
     height: 520px;
     object-fit: cover;
     border-radius: 32px;
+}
+
+/* Меню */
+.menu {
+    padding: 80px 40px;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 56px;
+    color: var(--moss);
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
+}
+
+.product-card {
+    background-color: var(--card);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(46, 42, 36, 0.08);
+    transition: transform 0.3 ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(46, 42, 36, 0.14);
+}
+
+.product-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-title {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.product-description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.add-to-cart {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--moss);
+    color: var(--cream);
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: var(--honey);
+    color: var(--text);
 }
