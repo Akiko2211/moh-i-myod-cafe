@@ -155,7 +155,7 @@ nav a:hover {
     border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(46, 42, 36, 0.08);
-    transition: transform 0.3 ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
@@ -212,4 +212,19 @@ nav a:hover {
 .add-to-cart:hover {
     background-color: var(--honey);
     color: var(--text);
+}
+
+.cart-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-left: 4px;
+    border-radius: 999px;
+    background-color: var(--moss);
+    color: var(--cream);
+    font-size: 12px;
+    font-weight: 700;
 }

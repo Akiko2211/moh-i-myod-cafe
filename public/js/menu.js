@@ -10,7 +10,7 @@ const products = [
     {
         id: 2,
         name: 'Капучино',
-        description: 'Клаcсика с бархатной молочной пенкой',
+        description: 'Классика с бархатной молочной пенкой',
         price: 220,
         image: 'images/menu/cappuccino.webp'
     },
@@ -28,7 +28,7 @@ const menuGrid = document.querySelector('#menu-grid');
 
 // Шаблон карточки
 function createProductCard(product) {
-return `
+    return `
 <article class="product-card">
     <img src="${product.image}" alt="${product.name}" class="product-image">
     <div class="product-info">
@@ -46,7 +46,47 @@ return `
 // Отрисовка всего меню
 function renderMenu() {
     const cardsHTML = products.map(createProductCard);
-    menuGrid.innerHTML = cardsHTML.join('')
+    menuGrid.innerHTML = cardsHTML.join('');
 }
 
 renderMenu();
+
+// Корзина
+const cart = [];
+const cartCount = document.querySelector('#cart-count');
+
+function addToCart(productId) {
+    const existingItem = cart.find(item => item.id === productId);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ id: productId, quantity: 1 });
+    }
+
+    updateCartCount();
+    console.log('Корзина', cart);
+}
+
+function updateCartCount() {
+    let total = 0;
+    for (const item of cart) {
+        total += item.quantity;
+    }
+    cartCount.textContent = total;
+}
+
+// клик по +
+menuGrid.addEventListener('click', function (event) {
+    const button = event.target.closest('.add-to-cart');
+
+    if (!button) return;
+
+    const productId = Number(button.dataset.id);
+    addToCart(productId);
+
+    button.textContent = '✓';
+    setTimeout(() => {
+        button.textContent = '+';
+    }, 1000);
+});
