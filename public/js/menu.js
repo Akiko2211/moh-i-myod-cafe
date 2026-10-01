@@ -1,5 +1,6 @@
 // Находим контейнер на странице
 const menuGrid = document.querySelector('#menu-grid');
+let products = [];
 
 // Шаблон карточки
 function createProductCard(product) {
@@ -24,7 +25,16 @@ function renderMenu() {
     menuGrid.innerHTML = cardsHTML.join('');
 }
 
-renderMenu();
+async function intMenu() {
+    try {
+        products = await getProducts();
+        renderMenu();
+    } catch (error) {
+        menuGrid.innerHTML = '<p>Не удалось загрузить меню. Попробуйте обновить страницу.</p>';
+        console.error(error);
+    }
+}
+intMenu();
 
 // клик по +
 menuGrid.addEventListener('click', function (event) {

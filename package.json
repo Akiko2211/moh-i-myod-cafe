@@ -1,0 +1,25 @@
+{
+  "name": "moh-i-myod-cafe",
+  "version": "1.0.0",
+  "description": "Сайт кофейни «Мох и Мёд»",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akiko2211/moh-i-myod-cafe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Akiko2211/moh-i-myod-cafe/issues"
+  },
+  "homepage": "https://github.com/Akiko2211/moh-i-myod-cafe#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

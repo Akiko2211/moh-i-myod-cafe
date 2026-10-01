@@ -1,6 +1,7 @@
 //Страница корзины
 const cartItemContainer = document.querySelector('#cart-items');
 const cartTotal = document.querySelector('#cart-total');
+let products = [];
 
 function createCartItem(item) {
     const product = products.find(p => p.id === item.id);
@@ -61,4 +62,13 @@ cartItemContainer.addEventListener('click', function(event) {
     renderCart();
 });
 
-renderCart();
+async function initCartPage() {
+    try {
+        products = await getProducts();
+        renderCart();
+    } catch (error) {
+        cartItemContainer.innerHTML = '<p>Не удалось загрузить корзину. Попробуйте обновить страницу.</p>';
+        console.error(error);
+    }
+}
+initCartPage();
