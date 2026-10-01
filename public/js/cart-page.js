@@ -1,0 +1,64 @@
+//Страница корзины
+const cartItemContainer = document.querySelector('#cart-items');
+const cartTotal = document.querySelector('#cart-total');
+
+function createCartItem(item) {
+    const product = products.find(p => p.id === item.id);
+    if (!product) return '';
+
+    const itemTotal = product.price * item.quantity;
+    
+    return `
+     <article class="cart-item">
+            <img src="${product.image}" alt="${product.name}" class="cart-item-image">
+            <div class="cart-item-info">
+                <h3 class="cart-item-title">${product.name}</h3>
+                <p class="cart-item-price">${product.price}&nbsp;₽</p>
+            </div>
+            <div class="cart-item-quantity">
+                <button class="qty-btn" type="button" data-id="${product.id}" data-action="decrease" aria-label="Уменьшить количество">−</button>
+                <span>${item.quantity}</span>
+                <button class="qty-btn" type="button" data-id="${product.id}" data-action="increase" aria-label="Увеличить количество">+</button>
+            </div>
+            <p class="cart-item-total">${itemTotal}&nbsp;₽</p>
+        </article>
+    `;
+}
+
+function getCartTotal() {
+    let total = 0;
+
+    for (const item of cart) {
+        const product = products.find(p => p.id === item.id);
+        if (product) {
+            total += product.price * item.quantity;
+        }
+    }
+    return total;
+}
+
+function renderCart() {
+    if(cart.length === 0) {
+        cartItemContainer.innerHTML = `
+        <p class="cart-empty">Корзина пуста. <a href="/#menu">Перейти в меню</a></p>
+        `;
+        cartTotal.innerHTML = '0&nbsp;₽';
+        return;
+    }
+
+    cartItemContainer.innerHTML = cart.map(createCartItem).join('');
+    cartTotal.innerHTML = `${getCartTotal()}&nbsp;₽`;
+}
+
+cartItemContainer.addEventListener('click', function(event) {
+    const button = event.target.closest('.qty-btn');
+    if(!button) return;
+
+    const productId = Number(button.dataset.id);
+    const delta = button.dataset.action === 'increase' ? 1 : -1;
+
+    changeQuantity(productId, delta);
+    renderCart();
+});
+
+renderCart();
