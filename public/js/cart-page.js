@@ -8,7 +8,7 @@ function createCartItem(item) {
     if (!product) return '';
 
     const itemTotal = product.price * item.quantity;
-    
+
     return `
      <article class="cart-item">
             <img src="${product.image}" alt="${product.name}" class="cart-item-image">
@@ -39,7 +39,7 @@ function getCartTotal() {
 }
 
 function renderCart() {
-    if(cart.length === 0) {
+    if (cart.length === 0) {
         cartItemContainer.innerHTML = `
         <p class="cart-empty">Корзина пуста. <a href="/#menu">Перейти в меню</a></p>
         `;
@@ -51,9 +51,9 @@ function renderCart() {
     cartTotal.innerHTML = `${getCartTotal()}&nbsp;₽`;
 }
 
-cartItemContainer.addEventListener('click', function(event) {
+cartItemContainer.addEventListener('click', function (event) {
     const button = event.target.closest('.qty-btn');
-    if(!button) return;
+    if (!button) return;
 
     const productId = Number(button.dataset.id);
     const delta = button.dataset.action === 'increase' ? 1 : -1;

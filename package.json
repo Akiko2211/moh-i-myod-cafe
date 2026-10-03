@@ -4,8 +4,8 @@
   "description": "Сайт кофейни «Мох и Мёд»",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
+    "start": "node --env-file=.env server.js",
+    "dev": "node --env-file=.env --watch server.js",
     "seed": "node db/seed.js"
   },
   "repository": {
@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/Akiko2211/moh-i-myod-cafe#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "bcryptjs": "^3.0.3",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
   }
 }

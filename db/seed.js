@@ -8,15 +8,14 @@ const insertProduct = db.prepare(`
     VALUES (?, ?, ?, ?, ?)
     `);
 
-    for (const product of products) {
-        insertProduct.run(
-            product.id,
-            product.name,
-            product.description,
-            product.price,
-            product.image
-        );
-    }
+for (const product of products) {
+    insertProduct.run(
+        product.id,
+        product.name,
+        product.description,
+        product.price,
+        product.image
+    );
+}
 
-    console.log(`Добавлено товаров: ${products.length}`);
-    
+console.log(`Добавлено товаров: ${products.length}`);

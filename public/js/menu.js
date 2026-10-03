@@ -25,7 +25,7 @@ function renderMenu() {
     menuGrid.innerHTML = cardsHTML.join('');
 }
 
-async function intMenu() {
+async function initMenu() {
     try {
         products = await getProducts();
         renderMenu();
@@ -34,7 +34,7 @@ async function intMenu() {
         console.error(error);
     }
 }
-intMenu();
+initMenu();
 
 // клик по +
 menuGrid.addEventListener('click', function (event) {
