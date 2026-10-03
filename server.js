@@ -1,5 +1,5 @@
 import express from 'express';
-import { products } from './data/products.js';
+import db from './db/database.js';
 
 const app = express();
 const PORT = 3000;
@@ -9,6 +9,7 @@ app.use(express.static('public'));
 
 // API: список товаров
 app.get('/api/products', (req, res) => {
+    const products = db.prepare('SELECT * FROM products').all();
     res.json(products);
 });
 
