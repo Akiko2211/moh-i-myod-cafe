@@ -1,5 +1,6 @@
 import express from 'express';
 import db from './db/database.js';
+import { sendReceipt } from './mailer.js';
 
 const app = express();
 const PORT = 3000;
@@ -109,7 +110,22 @@ app.post('/api/orders', (req, res) => {
 
         db.exec('COMMIT');
 
-        res.status(201).json({ orderId, total });
+        res.status(201).json({ orderId, total, receiptEmail: email || null });
+
+        const { created_at: createdAt } = db.prepare('SELECT created_at FROM orders WHERE id = ?').get(orderId);
+
+        sendReceipt({
+            id: orderId,
+            customerName: name,
+            customerPhone: phone,
+            customerEmail: email,
+            comment,
+            total,
+            createdAt,
+            items: orderItems
+        }).catch(error => {
+            console.error(`Не удалось отправить чек к заказу №${orderId}:`, error.message);
+        });
     } catch (error) {
         db.exec('ROLLBACK');
         console.error(error);

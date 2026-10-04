@@ -83,7 +83,8 @@ checkoutForm.addEventListener('submit', async (event) => {
         clearCart();
         checkoutForm.reset();
         renderCart();
-        checkoutMessage.textContent = `Заказ №${order.orderId} оформлен! Сумма: ${order.total} ₽. Мы позвоним, если появятся вопросы.`;
+        const receiptNote = order.receiptEmail ? ` Чек отправим на ${order.receiptEmail}.` : '';
+        checkoutMessage.textContent = `Заказ №${order.orderId} оформлен! Сумма: ${order.total} ₽.${receiptNote} Мы позвоним, если появятся вопросы.`;
     } catch (error) {
         checkoutMessage.textContent = error.message;
     } finally {
