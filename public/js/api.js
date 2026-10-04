@@ -8,3 +8,16 @@ async function getProducts() {
 
     return response.json();
 }
+
+async function getCurrentUser() {
+    const response = await fetch('/api/me');
+    
+    if (!response.ok) {
+        return null;
+    }
+    return response.json();
+}
+
+async function logout() {
+    await fetch('/api/logout', { method: 'POST' });
+}

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мох и Мёд - уютная кофейня</title>
+    <title>Регистрация — Мох и Мёд</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,8 +15,7 @@
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
     <script src="js/auth.js" defer></script>
-    <script src="js/cart-page.js" defer></script>
-
+    <script src="js/auth-page.js" defer></script>
 </head>
 
 <body>
@@ -45,20 +44,31 @@
 
     </header>
 
-    <main class="cart-page">
-        <h1 class="section-title">Корзина</h1>
-        <div class="cart-layout">
-            <div class="cart-items" id="cart-items"></div>
+    <main class="auth-page">
+        <form class="auth-form" id="register-form">
+            <h1 class="auth-title">Регистрация</h1>
 
-            <aside class="cart-summary">
-                <h2>Итог</h2>
-                <p class="cart-total">
-                    <span>Сумма:</span>
-                    <strong id="cart-total">0&nbsp;₽</strong>
-                </p>
-                <button class="btn cart-checkout" id="checkout-btn" type="button">Оформить заказ</button>
-            </aside>
-        </div>
+            <label class="form-field">
+                <span>Имя</span>
+                <input type="text" name="name" required autocomplete="name">
+            </label>
+
+            <label class="form-field">
+                <span>Почта</span>
+                <input type="email" name="email" required autocomplete="email">
+            </label>
+
+            <label class="form-field">
+                <span>Пароль</span>
+                <input type="password" name="password" required minlength="8" autocomplete="new-password">
+            </label>
+
+            <p class="form-error" id="form-error" role="alert"></p>
+
+            <button class="btn auth-submit" type="submit">Зарегистрироваться</button>
+
+            <p class="auth-switch">Уже есть аккаунт? <a href="login.html">Войти</a></p>
+        </form>
     </main>
 
     <footer></footer>

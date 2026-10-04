@@ -51,7 +51,7 @@ app.post('/api/register', async (req, res) => {
     const passwordHach = await bcrypt.hash(password, 10);
 
     const result = db.prepare(
-        'INSERT INTO users (name, email, pasword_hash) VALUES (?, ?, ?)'
+        'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)'
     ).run(name.trim(), normalizedEmail, passwordHach);
 
     req.session.userID = Number(result.lastInsertRowid);
