@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Круассан">
+  <rect width="800" height="600" fill="#EBD9BE"/>
+  <circle cx="120" cy="110" r="140" fill="#FFFDF8" opacity="0.45"/>
+  <circle cx="700" cy="500" r="130" fill="#FFFDF8" opacity="0.4"/>
+  <ellipse cx="400" cy="450" rx="250" ry="34" fill="#D7C09C"/>
+  <g stroke="#B9802A" stroke-width="5">
+    <ellipse cx="210" cy="380" rx="62" ry="42" fill="#D9A441" transform="rotate(-35 210 380)"/>
+    <ellipse cx="590" cy="380" rx="62" ry="42" fill="#D9A441" transform="rotate(35 590 380)"/>
+    <ellipse cx="275" cy="320" rx="80" ry="64" fill="#DFA94A" transform="rotate(-22 275 320)"/>
+    <ellipse cx="525" cy="320" rx="80" ry="64" fill="#DFA94A" transform="rotate(22 525 320)"/>
+    <ellipse cx="400" cy="300" rx="105" ry="90" fill="#E8B964"/>
+  </g>
+  <path d="M345 255 q55 -25 110 0 M335 300 q65 -25 130 0 M345 345 q55 -25 110 0" fill="none" stroke="#B9802A" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+</svg>

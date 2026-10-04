@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Авторский напиток">
+  <rect width="800" height="600" fill="#E6E1EE"/>
+  <circle cx="140" cy="120" r="140" fill="#F5EFE3" opacity="0.5"/>
+  <circle cx="690" cy="500" r="130" fill="#F5EFE3" opacity="0.45"/>
+  <ellipse cx="400" cy="500" rx="150" ry="24" fill="#CFC6DD"/>
+  <rect x="436" y="70" width="16" height="230" rx="8" fill="#5B6B3A" transform="rotate(14 444 185)"/>
+  <path d="M310 150 h180 l-22 345 h-136 z" fill="#FFFDF8" opacity="0.95"/>
+  <path d="M327 350 h146 l-9 145 h-128 z" fill="#D9A441"/>
+  <path d="M320 255 h160 l-6 95 h-148 z" fill="#8A5A3B"/>
+  <path d="M314 190 h172 l-4 65 h-164 z" fill="#F5EFE3"/>
+  <g fill="#9B8AC4">
+    <ellipse cx="610" cy="250" rx="11" ry="17"/>
+    <ellipse cx="628" cy="280" rx="11" ry="17"/>
+    <ellipse cx="606" cy="300" rx="11" ry="17"/>
+    <ellipse cx="626" cy="330" rx="11" ry="17"/>
+    <ellipse cx="604" cy="350" rx="11" ry="17"/>
+  </g>
+  <path d="M616 240 q -10 150 10 250" fill="none" stroke="#5B6B3A" stroke-width="6" stroke-linecap="round"/>
+</svg>

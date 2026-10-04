@@ -1,6 +1,11 @@
 import express from 'express';
 import db from './db/database.js';
-import { sendReceipt, sendBookingConfirmation } from './mailer.js';
+import {
+    sendReceipt,
+    sendBookingConfirmation,
+    notifyAdminAboutOrder,
+    notifyAdminAboutBooking
+} from './mailer.js';
 import { validateContact } from './validation.js';
 
 const app = express();
@@ -12,7 +17,7 @@ app.use(express.static('public'));
 
 // === Товары ===
 app.get('/api/products', (req, res) => {
-    const products = db.prepare('SELECT * FROM products').all();
+    const products = db.prepare('SELECT * FROM products ORDER BY id').all();
     res.json(products);
 });
 
@@ -78,7 +83,7 @@ app.post('/api/orders', (req, res) => {
 
         const { created_at: createdAt } = db.prepare('SELECT created_at FROM orders WHERE id = ?').get(orderId);
 
-        sendReceipt({
+        const orderForMail = {
             id: orderId,
             customerName: contact.name,
             customerPhone: contact.phone,
@@ -87,8 +92,14 @@ app.post('/api/orders', (req, res) => {
             total,
             createdAt,
             items: orderItems
-        }).catch(error => {
+        };
+
+        sendReceipt(orderForMail).catch(error => {
             console.error(`Не удалось отправить чек к заказу №${orderId}:`, error.message);
+        });
+
+        notifyAdminAboutOrder(orderForMail).catch(error => {
+            console.error(`Не удалось уведомить кафе о заказе №${orderId}:`, error.message);
         });
     } catch (error) {
         db.exec('ROLLBACK');
@@ -245,7 +256,7 @@ app.post('/api/bookings', (req, res) => {
             confirmationEmail: contact.email || null
         });
 
-        sendBookingConfirmation({
+        const bookingForMail = {
             id: bookingId,
             tableLabel: table.label,
             guests: guestsCount,
@@ -256,8 +267,14 @@ app.post('/api/bookings', (req, res) => {
             guestPhone: contact.phone,
             guestEmail: contact.email,
             comment: contact.comment
-        }).catch(error => {
+        };
+
+        sendBookingConfirmation(bookingForMail).catch(error => {
             console.error(`Не удалось отправить подтверждение брони №${bookingId}:`, error.message);
+        });
+
+        notifyAdminAboutBooking(bookingForMail).catch(error => {
+            console.error(`Не удалось уведомить кафе о брони №${bookingId}:`, error.message);
         });
     } catch (error) {
         db.exec('ROLLBACK');

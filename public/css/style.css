@@ -1,27 +1,68 @@
-/* Переменные */
+/* =========================================================
+   Мох и Мёд — стили сайта
+   Порядок: переменные → основа → общие блоки → шапка →
+   главная → меню → корзина → бронь → подвал → адаптивность
+   ========================================================= */
+
+/* === Переменные === */
 :root {
+    /* Цвета */
     --moss: #5B6B3A;
     --honey: #D9A441;
     --cream: #F5EFE3;
     --text: #2E2A24;
+    --muted: #6B655B;
     --card: #FFFDF8;
+    --line: #E3DCCD;
     --error: #B3261E;
 
-    --font-heading: 'Cormorant Garamond', serif;
-    --font-body: 'Manrope', sans-serif;
+    /* Шрифты */
+    --font-heading: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Manrope', Arial, sans-serif;
+
+    /* Размеры: clamp(минимум, «резиновое» значение, максимум) */
+    --max-width: 1200px;
+    --gutter: clamp(16px, 4vw, 40px);
+    --section-space: clamp(56px, 8vw, 96px);
+    --radius: 24px;
+    --header-height: 72px;
+    --shadow: 0 8px 24px rgba(46, 42, 36, 0.08);
 }
 
-/*Сброс*/
-* {
+/* === Основа === */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+    /* Якорные ссылки не прячутся под закреплённой шапкой */
+    scroll-padding-top: calc(var(--header-height) + 16px);
+    -webkit-text-size-adjust: 100%;
+}
+
 body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
     background-color: var(--cream);
     color: var(--text);
+}
+
+main {
+    flex: 1;
+}
+
+img {
+    display: block;
+    max-width: 100%;
 }
 
 a {
@@ -29,12 +70,137 @@ a {
     text-decoration: none;
 }
 
-/*Шапка*/
-header {
-    display: flex;
-    justify-content: space-between;
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+}
+
+/* === Общие блоки === */
+
+/* Контейнер: контент не шире --max-width и с отступами по краям.
+   На огромном экране или при уменьшении масштаба сайт не растягивается. */
+.container {
+    width: min(100% - 2 * var(--gutter), var(--max-width));
+    margin-inline: auto;
+}
+
+.section {
+    padding-block: var(--section-space);
+}
+
+.section-title {
+    margin-bottom: clamp(24px, 4vw, 48px);
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.1;
+    color: var(--moss);
+    text-align: center;
+}
+
+.section-intro {
+    max-width: 640px;
+    margin: calc(-1 * clamp(8px, 2vw, 24px)) auto clamp(24px, 4vw, 40px);
+    color: var(--muted);
+    text-align: center;
+}
+
+.btn {
+    display: inline-flex;
     align-items: center;
-    padding: 20px 40px;
+    justify-content: center;
+    padding: 12px 24px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-color: var(--honey);
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--moss);
+    color: var(--cream);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border-color: var(--moss);
+    color: var(--moss);
+}
+
+:focus-visible {
+    outline: 3px solid var(--honey);
+    outline-offset: 3px;
+}
+
+/* === Формы === */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-field small {
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    background-color: var(--cream);
+    font-size: 16px; /* меньше 16px — iPhone приближает страницу при вводе */
+    transition: border-color 0.3s ease;
+}
+
+.form-field textarea {
+    resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: var(--moss);
+}
+
+/* === Шапка === */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(245, 239, 227, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: box-shadow 0.3s ease;
+}
+
+.site-header.is-scrolled {
+    box-shadow: 0 4px 20px rgba(46, 42, 36, 0.08);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: var(--header-height);
 }
 
 .logo {
@@ -42,175 +208,39 @@ header {
     font-size: 28px;
     font-weight: 700;
     color: var(--moss);
+    white-space: nowrap;
 }
 
-nav ul {
+.site-nav ul {
     display: flex;
-    gap: 32px;
+    gap: clamp(16px, 3vw, 32px);
     list-style: none;
 }
 
-nav a {
-    transition: color 0.3s ease;
+.site-nav a {
+    padding-block: 4px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
-nav a:hover {
+.site-nav a:hover {
     color: var(--honey);
+}
+
+.site-nav a[aria-current="page"] {
+    border-bottom-color: var(--honey);
 }
 
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
-}
-
-.btn {
-    background-color: var(--honey);
-    color: var(--text);
-    padding: 12px 24px;
-    border-radius: 999px;
-    border: 2px solid transparent;
-    font-weight: 500;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn:hover {
-    color: var(--cream);
-    background-color: var(--moss);
-}
-
-/* Гавный экран */
-.hero {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    align-items: center;
-    gap: 48px;
-    padding: 40px 40px 80px;
-}
-
-.hero-label {
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-size: 14px;
-    color: var(--moss);
-    margin-bottom: 16px;
-}
-
-.hero h1 {
-    font-family: var(--font-heading);
-    font-size: 96px;
-    line-height: 1;
-    color: var(--moss);
-    margin-bottom: 24px;
-}
-
-.hero-description{
-    font-size: 18px;
-    line-height: 1.6;
-    max-width: 420px;
-    margin-bottom: 32px;
-}
-
-.hero-buttons{
-    display: flex;
     gap: 16px;
 }
 
-.btn-outline{
-    background-color: transparent;
-    border-color:  var(--moss);
-    color: var(--moss);
-}
-
-.hero-image img{
-    display: block;
-    width: 100%;
-    height: 520px;
-    object-fit: cover;
-    border-radius: 32px;
-}
-
-/* Меню */
-.menu {
-    padding: 80px 40px;
-}
-
-.section-title {
-    font-family: var(--font-heading);
-    font-size: 56px;
-    color: var(--moss);
-    text-align: center;
-    margin-bottom: 48px;
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 32px;
-}
-
-.product-card {
-    background-color: var(--card);
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(46, 42, 36, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(46, 42, 36, 0.14);
-}
-
-.product-image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-}
-
-.product-info {
-    padding: 20px;
-}
-
-.product-title {
-    font-family: var(--font-heading);
-    font-size: 26px;
-    margin-bottom: 8px;
-}
-
-.product-description {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 16px;
-}
-
-.product-footer {
-    display: flex;
-    justify-content: space-between;
+.cart-link {
+    display: inline-flex;
     align-items: center;
-}
-
-.product-price {
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.add-to-cart {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    background-color: var(--moss);
-    color: var(--cream);
-    font-size: 24px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.add-to-cart:hover {
-    background-color: var(--honey);
-    color: var(--text);
+    white-space: nowrap;
 }
 
 .cart-count {
@@ -220,7 +250,7 @@ nav a:hover {
     min-width: 22px;
     height: 22px;
     padding: 0 6px;
-    margin-left: 4px;
+    margin-left: 6px;
     border-radius: 999px;
     background-color: var(--moss);
     color: var(--cream);
@@ -228,48 +258,274 @@ nav a:hover {
     font-weight: 700;
 }
 
-/* Корзина */
-.cart-page {
-    padding: 40px 40px 80px;
+/* Кнопка-«бургер»: видна только на узких экранах */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    background: none;
+    cursor: pointer;
 }
 
+.menu-toggle span {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--text);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* «Бургер» превращается в крестик */
+.site-header.is-menu-open .menu-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.site-header.is-menu-open .menu-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.site-header.is-menu-open .menu-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* === Главный экран === */
+.hero {
+    padding-block: clamp(24px, 4vw, 48px) var(--section-space);
+}
+
+.hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    align-items: center;
+    gap: clamp(24px, 4vw, 56px);
+}
+
+.hero-label {
+    margin-bottom: 16px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--moss);
+}
+
+.hero h1 {
+    margin-bottom: 24px;
+    font-family: var(--font-heading);
+    font-size: clamp(52px, 7.5vw, 104px);
+    line-height: 1;
+    color: var(--moss);
+}
+
+.hero-description {
+    max-width: 420px;
+    margin-bottom: 32px;
+    font-size: clamp(16px, 1.6vw, 18px);
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.hero-image img {
+    width: 100%;
+    height: clamp(280px, 40vw, 520px);
+    object-fit: cover;
+    border-radius: 32px;
+}
+
+/* === Меню === */
+.menu-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.menu-filter {
+    padding: 8px 18px;
+    border: 1.5px solid var(--moss);
+    border-radius: 999px;
+    background: none;
+    color: var(--moss);
+    font-size: 15px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-filter:hover {
+    background-color: rgba(91, 107, 58, 0.08);
+}
+
+.menu-filter.is-active {
+    background-color: var(--moss);
+    color: var(--cream);
+}
+
+.menu-group + .menu-group {
+    margin-top: clamp(40px, 6vw, 72px);
+}
+
+.menu-group-title {
+    margin-bottom: 20px;
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 3.5vw, 36px);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: clamp(16px, 2.5vw, 28px);
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background-color: var(--card);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(46, 42, 36, 0.14);
+}
+
+.product-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.product-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.product-title {
+    margin-bottom: 6px;
+    font-family: var(--font-heading);
+    font-size: 24px;
+    line-height: 1.15;
+}
+
+.product-description {
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* margin-top: auto прижимает цену и кнопку к низу —
+   у всех карточек в ряду они на одной линии */
+.product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.product-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.product-portion {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.add-to-cart {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--moss);
+    color: var(--cream);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: var(--honey);
+    color: var(--text);
+}
+
+/* === Корзина === */
 .cart-layout {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 32px;
+    grid-template-columns: minmax(0, 1fr) 360px;
     align-items: start;
+    gap: 32px;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .cart-item {
     display: grid;
     grid-template-columns: 96px 1fr auto auto;
+    grid-template-areas: "image info quantity total";
     align-items: center;
     gap: 24px;
     padding: 16px;
-    background-color: var(--card);
     border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(46, 42, 36, 0.06);
+    background-color: var(--card);
+    box-shadow: var(--shadow);
 }
 
 .cart-item-image {
-    display: block;
+    grid-area: image;
     width: 96px;
-    aspect-ratio: 4/3;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: 12px;
 }
 
+.cart-item-info {
+    grid-area: info;
+    min-width: 0;
+}
+
 .cart-item-title {
+    margin-bottom: 4px;
     font-family: var(--font-heading);
     font-size: 24px;
-    margin-bottom: 4px;
+    line-height: 1.15;
 }
 
 .cart-item-price {
     font-size: 14px;
+    color: var(--muted);
 }
 
 .cart-item-quantity {
+    grid-area: quantity;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -284,6 +540,7 @@ nav a:hover {
     background-color: transparent;
     color: var(--moss);
     font-size: 18px;
+    line-height: 1;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -294,6 +551,7 @@ nav a:hover {
 }
 
 .cart-item-total {
+    grid-area: total;
     min-width: 80px;
     font-size: 18px;
     font-weight: 700;
@@ -302,31 +560,40 @@ nav a:hover {
 
 .cart-summary {
     position: sticky;
-    top: 24px;
+    top: calc(var(--header-height) + 16px);
     padding: 24px;
-    background-color: var(--card);
     border-radius: 20px;
-    box-shadow: 0 8px 24px rgb(46, 42, 36, 0.06);
+    background-color: var(--card);
+    box-shadow: var(--shadow);
 }
 
 .cart-summary h2 {
+    margin-bottom: 16px;
     font-family: var(--font-heading);
     font-size: 32px;
-    margin-bottom: 16px;
 }
 
 .cart-total {
     display: flex;
     justify-content: space-between;
-    font-size: 18px;
     margin-bottom: 24px;
+    font-size: 18px;
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .cart-checkout {
     width: 100%;
-    font-family: inherit;
     font-size: 16px;
-    cursor: pointer;
+}
+
+.checkout-message {
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .cart-empty {
@@ -338,83 +605,15 @@ nav a:hover {
     text-decoration: underline;
 }
 
-.cart-items {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* === Формы === */
-
-.form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.form-field input,
-.form-field select,
-.form-field textarea {
-    padding: 12px 16px;
-    border: 2px solid #E3DCCD;
-    border-radius: 12px;
-    background-color: var(--cream);
-    font-family: inherit;
-    font-size: 16px;
-    color: var(--text);
-    transition: border-color 0.3s ease;
-}
-
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-    outline: none;
-    border-color: var(--moss);
-}
-
-.form-error {
-    min-height: 20px;
-    font-size: 14px;
-    color: var(--error);
-}
-
-.checkout-message {
-    margin-top: 16px;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-/* === Форма заказа === */
-.checkout-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.form-field textarea {
-    resize: vertical;
-}
-
-.form-field small {
-    font-weight: 400;
-    opacity: 0.7;
-}
-
 /* === Бронь столика === */
-.booking {
-    padding: 80px 40px;
-}
-
 .booking-form {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
     grid-template-areas:
         "when hall"
         "contacts hall";
-    gap: 24px;
     align-items: start;
+    gap: 24px;
 }
 
 .booking-when {
@@ -433,16 +632,16 @@ nav a:hover {
 }
 
 .booking-card {
-    padding: 24px;
+    padding: clamp(16px, 2.5vw, 24px);
+    border-radius: var(--radius);
     background-color: var(--card);
-    border-radius: 24px;
-    box-shadow: 0 8px 24px rgba(46, 42, 36, 0.06);
+    box-shadow: var(--shadow);
 }
 
 .booking-step {
     margin-bottom: 16px;
     font-family: var(--font-heading);
-    font-size: 26px;
+    font-size: clamp(22px, 2.5vw, 26px);
 }
 
 .booking-contacts .booking-step {
@@ -459,15 +658,30 @@ nav a:hover {
     grid-column: 1 / -1;
 }
 
+.booking-submit {
+    font-size: 16px;
+}
+
+.booking-selected {
+    margin-top: 12px;
+    font-weight: 500;
+}
+
+.booking-message {
+    min-height: 21px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
 /* --- Схема зала --- */
 .hall {
     position: relative;
     aspect-ratio: 4 / 3;
     container-type: inline-size;
     overflow: hidden;
-    background-color: var(--cream);
-    border: 2px solid #E3DCCD;
+    border: 2px solid var(--line);
     border-radius: 20px;
+    background-color: var(--cream);
 }
 
 .hall-tables {
@@ -480,10 +694,10 @@ nav a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.6cqi;
+    font-size: clamp(9px, 2.6cqi, 15px);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #6B655B;
+    color: var(--muted);
 }
 
 .hall-windows {
@@ -491,8 +705,8 @@ nav a:hover {
     left: 8%;
     right: 8%;
     height: 7%;
-    background-color: #DCE6D0;
     border-radius: 0 0 12px 12px;
+    background-color: #DCE6D0;
 }
 
 .hall-bar {
@@ -500,8 +714,8 @@ nav a:hover {
     bottom: 6%;
     width: 38%;
     height: 14%;
-    background-color: #E3D3B4;
     border-radius: 12px;
+    background-color: #E3D3B4;
 }
 
 .hall-entrance {
@@ -509,12 +723,14 @@ nav a:hover {
     left: 42%;
     width: 14%;
     height: 4.5%;
-    font-size: 2.2cqi;
-    color: var(--text);
-    background-color: var(--honey);
     border-radius: 8px 8px 0 0;
+    background-color: var(--honey);
+    font-size: clamp(8px, 2.2cqi, 13px);
+    color: var(--text);
 }
 
+/* left/top задают центр столика в процентах от размера зала,
+   translate(-50%, -50%) ставит в эту точку именно центр */
 .hall-table {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -526,7 +742,6 @@ nav a:hover {
     border: 2px solid var(--moss);
     background-color: var(--card);
     color: var(--moss);
-    font-family: inherit;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
@@ -560,13 +775,13 @@ nav a:hover {
 
 .hall-table-label {
     font-family: var(--font-heading);
-    font-size: max(16px, 4.4cqi);
+    font-size: clamp(16px, 4.4cqi, 30px);
     font-weight: 700;
     line-height: 1;
 }
 
 .hall-table-seats {
-    font-size: 2.2cqi;
+    font-size: clamp(10px, 2.2cqi, 14px);
 }
 
 .hall-table.is-free:hover {
@@ -592,15 +807,17 @@ nav a:hover {
     cursor: not-allowed;
 }
 
-.hall-table:focus-visible {
-    outline: 3px solid var(--honey);
-    outline-offset: 3px;
+/* На маленькой схеме прячем подпись «N мест» — остаётся крупный номер */
+@container (max-width: 480px) {
+    .hall-table-seats {
+        display: none;
+    }
 }
 
 .hall-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 8px 16px;
     margin-top: 16px;
     list-style: none;
     font-size: 14px;
@@ -633,43 +850,136 @@ nav a:hover {
     background: repeating-linear-gradient(45deg, #EFE9DD, #EFE9DD 3px, #E3DCCD 3px, #E3DCCD 6px);
 }
 
-.booking-selected {
-    margin-top: 12px;
-    font-weight: 500;
-}
-
-.booking-submit {
-    font-family: inherit;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.booking-submit:disabled {
-    opacity: 0.6;
-    cursor: wait;
-}
-
-.booking-message {
-    min-height: 21px;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-/* На маленькой схеме прячем подпись «N мест» — остаётся крупный номер */
-@container (max-width: 480px) {
-    .hall-table-seats {
-        display: none;
-    }
-}
-
 .hall-error {
     padding: 24px;
 }
 
-/* На узких экранах — всё в одну колонку */
+/* === Подвал === */
+.site-footer {
+    margin-top: var(--section-space);
+    padding-block: 48px 24px;
+    background-color: var(--moss);
+    color: var(--cream);
+}
+
+.footer-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 32px;
+}
+
+.site-footer .logo {
+    color: var(--cream);
+}
+
+.footer-brand p {
+    max-width: 320px;
+    margin-top: 12px;
+    opacity: 0.85;
+}
+
+.footer-title {
+    margin-bottom: 12px;
+    font-family: var(--font-heading);
+    font-size: 22px;
+}
+
+.footer-col p + p {
+    margin-top: 4px;
+}
+
+.footer-col a:hover {
+    color: var(--honey);
+}
+
+.footer-note {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(245, 239, 227, 0.2);
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+/* =========================================================
+   Адаптивность
+   ========================================================= */
+
+/* Ноутбуки и планшеты в альбомной ориентации */
+@media (max-width: 1024px) {
+    .cart-layout {
+        grid-template-columns: minmax(0, 1fr) 320px;
+    }
+}
+
+/* Планшеты: меню прячется в «бургер», блоки встают в колонку */
 @media (max-width: 900px) {
-    .booking {
-        padding: 60px 16px;
+    :root {
+        --header-height: 64px;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .site-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: none;
+        padding: 8px var(--gutter) 24px;
+        background-color: var(--cream);
+        box-shadow: 0 12px 24px rgba(46, 42, 36, 0.1);
+    }
+
+    .site-header.is-menu-open .site-nav {
+        display: block;
+    }
+
+    .site-nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .site-nav a {
+        display: block;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 18px;
+    }
+
+    .site-nav a[aria-current="page"] {
+        border-bottom-color: var(--line);
+        color: var(--moss);
+        font-weight: 700;
+    }
+
+    .hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
+
+    .hero-description {
+        margin-inline: auto;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-image img {
+        height: clamp(240px, 56vw, 420px);
+    }
+
+    .cart-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+        position: static;
     }
 
     .booking-form {
@@ -678,5 +988,125 @@ nav a:hover {
             "when"
             "hall"
             "contacts";
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Телефоны */
+@media (max-width: 600px) {
+    .logo {
+        font-size: 24px;
+    }
+
+    .header-btn {
+        display: none;
+    }
+
+    .hero-buttons .btn {
+        flex: 1 1 100%;
+    }
+
+    /* Фильтры меню — в одну строку с прокруткой пальцем */
+    .menu-filters {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        margin-inline: calc(-1 * var(--gutter));
+        padding-inline: var(--gutter);
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+
+    .menu-filters::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Карточки меню — по две в ряд, компактнее */
+    .menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .product-card {
+        border-radius: 18px;
+    }
+
+    .product-info {
+        padding: 12px;
+    }
+
+    .product-title {
+        font-size: 18px;
+    }
+
+    .product-description {
+        margin-bottom: 12px;
+        font-size: 12px;
+    }
+
+    .product-price {
+        font-size: 15px;
+    }
+
+    .product-portion {
+        font-size: 12px;
+    }
+
+    .add-to-cart {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+    }
+
+    /* Строка корзины: фото и название сверху, количество и сумма снизу */
+    .cart-item {
+        grid-template-columns: 72px 1fr;
+        grid-template-areas:
+            "image info"
+            "quantity total";
+        gap: 12px 16px;
+    }
+
+    .cart-item-image {
+        width: 72px;
+    }
+
+    .cart-item-title {
+        font-size: 20px;
+    }
+
+    .booking-when-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Очень узкие экраны (старые телефоны) */
+@media (max-width: 360px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Если человек отключил анимации в настройках системы */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
     }
 }

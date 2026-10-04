@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Завтрак">
+  <rect width="800" height="600" fill="#F3E3C3"/>
+  <circle cx="680" cy="110" r="150" fill="#FFFDF8" opacity="0.45"/>
+  <circle cx="400" cy="320" r="210" fill="#E3D3B4"/>
+  <circle cx="400" cy="310" r="190" fill="#FFFDF8"/>
+  <circle cx="400" cy="310" r="140" fill="#F5EFE3"/>
+  <ellipse cx="340" cy="300" rx="62" ry="54" fill="#D9A441"/>
+  <ellipse cx="340" cy="292" rx="52" ry="42" fill="#E8B964"/>
+  <ellipse cx="452" cy="270" rx="58" ry="50" fill="#D9A441"/>
+  <ellipse cx="452" cy="262" rx="48" ry="39" fill="#E8B964"/>
+  <ellipse cx="430" cy="372" rx="56" ry="48" fill="#D9A441"/>
+  <ellipse cx="430" cy="364" rx="46" ry="37" fill="#E8B964"/>
+  <path d="M300 360 q30 -10 40 20" fill="none" stroke="#B9802A" stroke-width="8" stroke-linecap="round"/>
+  <ellipse cx="335" cy="395" rx="34" ry="22" fill="#FFFDF8" stroke="#E3D3B4" stroke-width="4"/>
+  <circle cx="485" cy="335" r="11" fill="#B5473A"/>
+  <circle cx="500" cy="352" r="9" fill="#5E3A6B"/>
+  <rect x="640" y="160" width="16" height="300" rx="8" fill="#B8B0A2"/>
+  <rect x="140" y="160" width="16" height="300" rx="8" fill="#B8B0A2"/>
+</svg>

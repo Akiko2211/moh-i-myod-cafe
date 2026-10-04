@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Кусочек торта">
+  <rect width="800" height="600" fill="#F0DCD3"/>
+  <circle cx="680" cy="120" r="140" fill="#FFFDF8" opacity="0.5"/>
+  <circle cx="110" cy="500" r="120" fill="#FFFDF8" opacity="0.45"/>
+  <ellipse cx="400" cy="470" rx="250" ry="40" fill="#FFFDF8"/>
+  <ellipse cx="400" cy="462" rx="210" ry="28" fill="#F5EFE3"/>
+  <path d="M250 290 L470 210 L560 255 L340 335 Z" fill="#E8B964"/>
+  <path d="M340 335 L560 255 L560 380 L340 460 Z" fill="#C98D3A"/>
+  <path d="M250 290 L340 335 L340 460 L250 415 Z" fill="#E3D3B4"/>
+  <g fill="#FFFDF8">
+    <path d="M250 320 L340 365 L340 377 L250 332 Z"/>
+    <path d="M250 352 L340 397 L340 409 L250 364 Z"/>
+    <path d="M250 384 L340 429 L340 441 L250 396 Z"/>
+    <path d="M340 365 L560 285 L560 297 L340 377 Z"/>
+    <path d="M340 397 L560 317 L560 329 L340 409 Z"/>
+    <path d="M340 429 L560 349 L560 361 L340 441 Z"/>
+  </g>
+  <circle cx="420" cy="252" r="22" fill="#B5473A"/>
+  <path d="M422 232 q12 -24 34 -20 q-10 18 -34 20 z" fill="#5B6B3A"/>
+</svg>

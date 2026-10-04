@@ -187,3 +187,49 @@ export async function sendBookingConfirmation(booking) {
 
     console.log(`Подтверждение брони №${booking.id} отправлено на ${booking.guestEmail}`);
 }
+
+// === Уведомления для кафе о новых заказах и бронях ===
+// Приходят на ADMIN_EMAIL, а если он не указан — на MAIL_USER
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || MAIL_USER;
+
+async function notifyAdmin(subject, lines) {
+    if (!transporter || !ADMIN_EMAIL) return;
+
+    await transporter.sendMail({
+        from: `"Сайт Мох и Мёд" <${MAIL_USER}>`,
+        to: ADMIN_EMAIL,
+        subject,
+        text: lines.filter(line => line !== null).join('\n')
+    });
+}
+
+export async function notifyAdminAboutOrder(order) {
+    await notifyAdmin(`🛒 Новый заказ №${order.id} — ${formatPrice(order.total)}`, [
+        `Заказ №${order.id}`,
+        '',
+        ...order.items.map(item => `• ${item.name} × ${item.quantity} — ${formatPrice(item.price * item.quantity)}`),
+        '',
+        `Итого: ${formatPrice(order.total)}`,
+        '',
+        `Имя: ${order.customerName}`,
+        `Телефон: ${order.customerPhone}`,
+        order.customerEmail ? `Почта: ${order.customerEmail}` : null,
+        order.comment ? `Комментарий: ${order.comment}` : null
+    ]);
+}
+
+export async function notifyAdminAboutBooking(booking) {
+    await notifyAdmin(`📅 Бронь №${booking.id}: ${formatDate(booking.date)} в ${booking.time}, столик №${booking.tableLabel}`, [
+        `Бронь №${booking.id}`,
+        '',
+        `Дата: ${formatDate(booking.date)}`,
+        `Время: ${booking.time} (на ${booking.durationHours} часа)`,
+        `Столик: №${booking.tableLabel}`,
+        `Гостей: ${booking.guests}`,
+        '',
+        `Имя: ${booking.guestName}`,
+        `Телефон: ${booking.guestPhone}`,
+        booking.guestEmail ? `Почта: ${booking.guestEmail}` : null,
+        booking.comment ? `Комментарий: ${booking.comment}` : null
+    ]);
+}

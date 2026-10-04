@@ -4,143 +4,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мох и Мёд - уютная кофейня</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Мох и Мёд — уютная кофейня</title>
+    <meta name="description" content="Кофейня «Мох и Мёд»: кофе, авторские напитки, завтраки и выпечка. Заказ онлайн и бронь столика.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Manrope:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 
     <script src="js/api.js" defer></script>
     <script src="js/cart.js" defer></script>
+    <script src="js/header.js" defer></script>
     <script src="js/menu.js" defer></script>
-    <script src="js/booking.js" defer></script>
-
 </head>
 
 <body>
 
-    <header>
-        <a href="/" class="logo">Мох и Мёд</a>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="logo">Мох и Мёд</a>
 
-        <nav>
-            <ul>
-                <li><a href="#menu">Меню</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#booking">Бронь</a></li>
-                <li><a href="#contacts">Контакты</a></li>
-            </ul>
-        </nav>
+            <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+                <ul>
+                    <li><a href="/#menu">Меню</a></li>
+                    <li><a href="/booking.html">Бронь столика</a></li>
+                    <li><a href="#contacts">Контакты</a></li>
+                </ul>
+            </nav>
 
-        <div class="header-actions">
-            <a href="#booking" class="btn">Забронировать столик</a>
-            <a href="cart.html" class="cart-link">
-                Корзина <span class="cart-count" id="cart-count">0</span>
-            </a>
+            <div class="header-actions">
+                <a href="/booking.html" class="btn header-btn">Забронировать</a>
+                <a href="/cart.html" class="cart-link">
+                    Корзина <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
-
     </header>
 
     <main>
         <section class="hero">
-            <div class="hero-text">
-                <p class="hero-label">Уютная кофейня</p>
-                <h1>Мох и Мёд</h1>
-                <p class="hero-description">
-                    Свежий кофе, домашняя выпечка и мёд - в тёплом уголке среди зелени.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#menu" class="btn">Смотреть меню</a>
-                    <a href="#booking" class="btn btn-outline">Забронировать</a>
-                </div>
-            </div>
-
-            <div class="hero-image">
-                <img src="images/hero.webp" alt="Гости пьют кофе за деревянным столом в кофейне «Мох и Мёд»">
-            </div>
-        </section>
-
-        <section class="menu" id="menu">
-            <h2 class="section-title">Меню</h2>
-            <div class="menu-grid" id="menu-grid"></div>
-        </section>
-
-        <section class="booking" id="booking">
-            <h2 class="section-title">Бронь столика</h2>
-
-            <form class="booking-form" id="booking-form">
-                <div class="booking-card booking-when">
-                    <h3 class="booking-step">1. Когда и сколько гостей</h3>
-                    <div class="booking-when-fields">
-                        <label class="form-field">
-                            <span>Дата</span>
-                            <input type="date" name="date" id="booking-date" required>
-                        </label>
-
-                        <label class="form-field">
-                            <span>Время</span>
-                            <select name="time" id="booking-time" required></select>
-                        </label>
-
-                        <label class="form-field">
-                            <span>Гостей</span>
-                            <select name="guests" id="booking-guests" required></select>
-                        </label>
+            <div class="container hero-inner">
+                <div class="hero-text">
+                    <p class="hero-label">Уютная кофейня</p>
+                    <h1>Мох и Мёд</h1>
+                    <p class="hero-description">
+                        Свежий кофе, домашняя выпечка и мёд — в тёплом уголке среди зелени.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#menu" class="btn">Смотреть меню</a>
+                        <a href="/booking.html" class="btn btn-outline">Забронировать столик</a>
                     </div>
                 </div>
 
-                <div class="booking-card booking-hall">
-                    <h3 class="booking-step">2. Выберите столик</h3>
-
-                    <div class="hall">
-                        <div class="hall-decor hall-windows" aria-hidden="true">Окна</div>
-                        <div class="hall-decor hall-bar" aria-hidden="true">Барная стойка</div>
-                        <div class="hall-decor hall-entrance" aria-hidden="true">Вход</div>
-                        <div class="hall-tables" id="hall-tables"></div>
-                    </div>
-
-                    <ul class="hall-legend">
-                        <li><span class="legend-dot"></span>Свободен</li>
-                        <li><span class="legend-dot is-selected"></span>Выбран</li>
-                        <li><span class="legend-dot is-busy"></span>Занят</li>
-                        <li><span class="legend-dot is-small"></span>Мало мест</li>
-                    </ul>
-
-                    <p class="booking-selected" id="booking-selected">Выберите свободный столик на схеме</p>
+                <div class="hero-image">
+                    <img src="images/hero.webp" alt="Гости пьют кофе за деревянным столом в кофейне «Мох и Мёд»">
                 </div>
+            </div>
+        </section>
 
-                <div class="booking-card booking-contacts">
-                    <h3 class="booking-step">3. Контакты</h3>
-
-                    <label class="form-field">
-                        <span>Имя</span>
-                        <input type="text" name="name" required minlength="2" maxlength="50" autocomplete="name">
-                    </label>
-
-                    <label class="form-field">
-                        <span>Телефон</span>
-                        <input type="tel" name="phone" required placeholder="+7 900 123-45-67" autocomplete="tel">
-                    </label>
-
-                    <label class="form-field">
-                        <span>Почта для подтверждения <small>(необязательно)</small></span>
-                        <input type="email" name="email" autocomplete="email">
-                    </label>
-
-                    <label class="form-field">
-                        <span>Комментарий <small>(необязательно)</small></span>
-                        <textarea name="comment" rows="3" maxlength="300" placeholder="Например: будем с ребёнком, нужен детский стул"></textarea>
-                    </label>
-
-                    <button class="btn booking-submit" id="booking-btn" type="submit">Забронировать</button>
-                    <p class="booking-message" id="booking-message" role="status"></p>
-                </div>
-            </form>
+        <section class="section menu" id="menu">
+            <div class="container">
+                <h2 class="section-title">Меню</h2>
+                <div class="menu-filters" id="menu-filters" aria-label="Разделы меню"></div>
+                <div class="menu-list" id="menu-list"></div>
+            </div>
         </section>
     </main>
 
-    <footer></footer>
+    <footer class="site-footer" id="contacts">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <a href="/" class="logo">Мох и Мёд</a>
+                <p>Уютная кофейня среди зелени: свежий кофе, домашняя выпечка и мёд.</p>
+            </div>
+
+            <div class="footer-col">
+                <h2 class="footer-title">Часы работы</h2>
+                <p>Ежедневно с 08:00 до 22:00</p>
+            </div>
+
+            <div class="footer-col">
+                <h2 class="footer-title">Контакты</h2>
+                <p>ул. Лесная, 12</p>
+                <p><a href="tel:+79000000000">+7 (900) 000-00-00</a></p>
+            </div>
+        </div>
+
+        <p class="container footer-note">© 2026 «Мох и Мёд» — учебный проект</p>
+    </footer>
 </body>
 
 </html>

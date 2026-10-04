@@ -5,17 +5,22 @@ import { cafeTables } from '../data/tables.js';
 // UPSERT: если записи с таким id нет — добавить, если есть — обновить.
 // Удалять нельзя: на товары и столики ссылаются заказы и брони.
 const upsertProduct = db.prepare(`
-    INSERT INTO products (id, name, description, price, image)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO products (id, category, name, description, price, portion, image)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
+        category = excluded.category,
         name = excluded.name,
         description = excluded.description,
         price = excluded.price,
+        portion = excluded.portion,
         image = excluded.image
 `);
 
 for (const product of products) {
-    upsertProduct.run(product.id, product.name, product.description, product.price, product.image);
+    upsertProduct.run(
+        product.id, product.category, product.name, product.description,
+        product.price, product.portion, product.image
+    );
 }
 
 console.log(`Товаров в базе обновлено: ${products.length}`);

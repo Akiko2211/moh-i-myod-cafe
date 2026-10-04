@@ -1,15 +1,29 @@
 import { DatabaseSync } from "node:sqlite";
+
 const db = new DatabaseSync('cafe.db');
-db.exec (`
-   CREATE TABLE IF NOT EXISTS products (
-   id              INTEGER PRIMARY KEY AUTOINCREMENT,    
-   name            TEXT     NOT NULL,
-   description     TEXT     NOT NULL,
-   price           INTEGER  NOT NULL,
-   image           TEXT     NOT NULL
-   ) 
-   
+db.exec(`
+    CREATE TABLE IF NOT EXISTS products (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        category    TEXT    NOT NULL DEFAULT 'coffee',
+        name        TEXT    NOT NULL,
+        description TEXT    NOT NULL,
+        price       INTEGER NOT NULL,
+        portion     TEXT,
+        image       TEXT    NOT NULL
+    )
 `);
+
+// Миграция: добавляет столбец в уже существующую таблицу, если его там ещё нет
+function addColumnIfMissing(table, column, definition) {
+    const columns = db.prepare(`PRAGMA table_info(${table})`).all();
+
+    if (!columns.some(item => item.name === column)) {
+        db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+    }
+}
+
+addColumnIfMissing('products', 'category', "TEXT NOT NULL DEFAULT 'coffee'");
+addColumnIfMissing('products', 'portion', 'TEXT');
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS orders (
