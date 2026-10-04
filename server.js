@@ -9,7 +9,7 @@ import {
 import { validateContact } from './validation.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 // === Настройки ===
 app.use(express.json());
@@ -81,7 +81,7 @@ app.post('/api/orders', (req, res) => {
 
         res.status(201).json({ orderId, total, receiptEmail: contact.email || null });
 
-        const { created_at: createdAt } = db.prepare('SELECT created_at FROM orders WHERE id = ?').get(orderId);
+        const createdAt = formatLocalDateTime(new Date());
 
         const orderForMail = {
             id: orderId,
@@ -127,6 +127,13 @@ function minutesToTime(minutes) {
     const hours = String(Math.floor(minutes / 60)).padStart(2, '0');
     const mins = String(minutes % 60).padStart(2, '0');
     return `${hours}:${mins}`;
+}
+
+// Дата и время по часовому поясу компьютера, на котором работает сервер: «04.10.2026 15:43»
+// (SQLite CURRENT_TIMESTAMP хранит время по UTC — для чека это на 4 часа раньше, чем в Самаре)
+function formatLocalDateTime(date) {
+    const [year, month, day] = toDateString(date).split('-');
+    return `${day}.${month}.${year} ${minutesToTime(date.getHours() * 60 + date.getMinutes())}`;
 }
 
 // Проверяет дату и время, возвращает { slot } или { error }
