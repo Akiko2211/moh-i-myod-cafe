@@ -1,6 +1,8 @@
 //Страница корзины
 const cartItemContainer = document.querySelector('#cart-items');
 const cartTotal = document.querySelector('#cart-total');
+const checkoutButton = document.querySelector('#checkout-btn');
+const checkoutMessage = document.querySelector('#checkout-message');
 let products = [];
 
 function createCartItem(item) {
@@ -60,6 +62,32 @@ cartItemContainer.addEventListener('click', function (event) {
 
     changeQuantity(productId, delta);
     renderCart();
+});
+
+checkoutButton.addEventListener('click', async () => {
+    checkoutMessage.textContent = '';
+
+    if (cart.length === 0) {
+        checkoutMessage.textContent = 'Корзина пуста';
+        return;
+    }
+
+    checkoutButton.disabled = true;
+
+    try {
+        const order = await createOrder(cart);
+        clearCart();
+        renderCart();
+        checkoutMessage.textContent = `Заказ №${order.orderId} оформлен! Сумма: ${order.total} ₽`;
+    } catch (error) {
+        if (error.status === 401) {
+            window.location.href = 'login.html?redirect=cart';
+            return;
+        }
+        checkoutMessage.textContent = error.message;
+    } finally {
+        checkoutButton.disabled = false;
+    }
 });
 
 async function initCartPage() {

@@ -2,6 +2,8 @@
 const registerForm = document.querySelector('#register-form');
 const loginForm = document.querySelector('#login-form');
 const formError = document.querySelector('#form-error');
+const params = new URLSearchParams(window.location.search);
+const redirectTarget = params.get('redirect') === 'cart' ? '/cart.html' : '/';
 
 async function handleAuthSubmit(event, url) {
     event.preventDefault();
@@ -27,7 +29,7 @@ async function handleAuthSubmit(event, url) {
             return;
         }
 
-        window.location.href = '/';
+        window.location.href = redirectTarget;
     } catch (error) {
         formError.textContent = 'Нет связи с сервером. Попробуйте позже.';
         console.error(error);

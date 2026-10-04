@@ -38,6 +38,12 @@ function changeQuantity(productId, delta) {
     updateCartCount();
 }
 
+function clearCart() {
+    cart = [];
+    saveCart();
+    updateCartCount();
+}
+
 function updateCartCount() {
     const cartCount = document.querySelector('#cart-count');
     if (!cartCount) return;

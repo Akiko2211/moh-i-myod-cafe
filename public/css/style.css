@@ -443,3 +443,9 @@ nav a:hover {
     text-decoration: underline;
     cursor: pointer;
 }
+
+.checkout-message {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+}

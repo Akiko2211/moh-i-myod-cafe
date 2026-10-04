@@ -21,4 +21,24 @@ db.exec(`
     )
 `);
 
+db.exec(`
+    CREATE TABLE IF NOT EXISTS orders (
+        id         INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id    INTEGER NOT NULL REFERENCES users(id),
+        total      INTEGER NOT NULL,
+        created_at TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS order_items (
+        id         INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id   INTEGER NOT NULL REFERENCES orders(id),
+        product_id INTEGER NOT NULL REFERENCES products(id),
+        name       TEXT    NOT NULL,
+        price      INTEGER NOT NULL,
+        quantity   INTEGER NOT NULL
+    )
+`);
+
 export default db;

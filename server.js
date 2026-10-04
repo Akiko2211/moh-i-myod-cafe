@@ -8,7 +8,14 @@ const app = express();
 const PORT = 3000;
 
 //Настройки
-app.use(express.json());
+app.use(express.json('public'));
+//Проверка входа
+function requireAuth(req, res, next) {
+    if (!req.session.userID) {
+        return res.status(401).json({ error: 'Войдите, чтобы продолжить' });
+    }
+    next();
+}
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -104,6 +111,66 @@ app.post('/api/logout', (req, res) => {
         res.clearCookie('connect.sid');
         res.json({ ok: true });
     });
+});
+
+//Оформление заказа
+app.post('/api/orders', requireAuth, (req, res) => {
+    const { items } = req.body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: 'Корзина пуста' });
+    }
+
+    const getProduct = db.prepare('SELECT id, name, price FROM products WHERE id = ?');
+    const orderItems = [];
+
+    for (const item of items) {
+        const product = getProduct.get(item.id);
+        const quantity = Number(item.quantity);
+
+        if (!product || !Number.isInteger(quantity) || quantity < 1 || quantity > 50) {
+            return res.status(400).json({ error: 'Некорректный состав заказа' });
+        }
+
+        orderItems.push({
+            productId: product.id,
+            name: product.name,
+            price: product.price,
+            quantity
+        });
+    }
+
+    let total = 0;
+    for (const item of orderItems) {
+        total += item.price * item.quantity;
+    }
+
+    db.exec('BEGIN');
+
+    try {
+        const orderResult = db.prepare(
+            'INSERT INTO orders (user_id, total) VALUES (?, ?)'
+        ).run(req.session.userID, total);
+
+        const orderId = Number(orderResult.lastInsertRowid);
+
+        const insertItem = db.prepare(`
+            INSERT INTO order_items (order_id, product_id, name, price, quantity)
+            VALUES (?, ?, ?, ?, ?)
+        `);
+
+        for (const item of orderItems) {
+            insertItem.run(orderId, item.productId, item.name, item.price, item.quantity);
+        }
+
+        db.exec('COMMIT');
+
+        res.status(201).json({ orderId, total });
+    } catch (error) {
+        db.exec('ROLLBACK');
+        console.error(error);
+        res.status(500).json({ error: 'Не удалось оформить заказ' });
+    }
 });
 
 // Запуск
