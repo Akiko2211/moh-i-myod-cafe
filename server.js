@@ -9,7 +9,7 @@ import {
 import { validateContact } from './validation.js';
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = 3000;
 
 // === Настройки ===
 app.use(express.json());

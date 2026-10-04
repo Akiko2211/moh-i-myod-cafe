@@ -4,9 +4,11 @@
   "description": "Сайт кофейни «Мох и Мёд»",
   "main": "server.js",
   "scripts": {
-    "start": "node --env-file=.env server.js",
-    "dev": "node --env-file=.env --watch server.js",
-    "seed": "node db/seed.js"
+    "predev": "node scripts/setup.js",
+    "dev": "node --disable-warning=ExperimentalWarning --env-file=.env --watch server.js",
+    "prestart": "node scripts/setup.js",
+    "start": "node --disable-warning=ExperimentalWarning --env-file=.env server.js",
+    "seed": "node --disable-warning=ExperimentalWarning db/seed.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
   "dependencies": {
     "express": "^5.2.1",
     "nodemailer": "^10.0.14"
+  },
+  "engines": {
+    "node": ">=22.5.0"
   }
 }
