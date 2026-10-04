@@ -12,21 +12,15 @@ db.exec (`
 `);
 
 db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-        id            INTEGER PRIMARY KEY AUTOINCREMENT,
-        name          TEXT NOT NULL,
-        email         TEXT NOT NULL UNIQUE,
-        password_hash TEXT NOT NULL,
-        created_at    TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    )
-`);
-
-db.exec(`
     CREATE TABLE IF NOT EXISTS orders (
-        id         INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id    INTEGER NOT NULL REFERENCES users(id),
-        total      INTEGER NOT NULL,
-        created_at TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
+        id             INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_name  TEXT    NOT NULL,
+        customer_phone TEXT    NOT NULL,
+        customer_email TEXT,
+        comment        TEXT,
+        total          INTEGER NOT NULL,
+        status         TEXT    NOT NULL DEFAULT 'new',
+        created_at     TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
 `);
 

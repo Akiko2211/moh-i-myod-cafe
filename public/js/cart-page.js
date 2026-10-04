@@ -1,6 +1,7 @@
 //Страница корзины
 const cartItemContainer = document.querySelector('#cart-items');
 const cartTotal = document.querySelector('#cart-total');
+const checkoutForm = document.querySelector('#checkout-form');
 const checkoutButton = document.querySelector('#checkout-btn');
 const checkoutMessage = document.querySelector('#checkout-message');
 let products = [];
@@ -64,7 +65,8 @@ cartItemContainer.addEventListener('click', function (event) {
     renderCart();
 });
 
-checkoutButton.addEventListener('click', async () => {
+checkoutForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
     checkoutMessage.textContent = '';
 
     if (cart.length === 0) {
@@ -72,18 +74,17 @@ checkoutButton.addEventListener('click', async () => {
         return;
     }
 
+    const customer = Object.fromEntries(new FormData(checkoutForm));
+
     checkoutButton.disabled = true;
 
     try {
-        const order = await createOrder(cart);
+        const order = await createOrder({ customer, items: cart });
         clearCart();
+        checkoutForm.reset();
         renderCart();
-        checkoutMessage.textContent = `Заказ №${order.orderId} оформлен! Сумма: ${order.total} ₽`;
+        checkoutMessage.textContent = `Заказ №${order.orderId} оформлен! Сумма: ${order.total} ₽. Мы позвоним, если появятся вопросы.`;
     } catch (error) {
-        if (error.status === 401) {
-            window.location.href = 'login.html?redirect=cart';
-            return;
-        }
         checkoutMessage.textContent = error.message;
     } finally {
         checkoutButton.disabled = false;

@@ -1,121 +1,64 @@
 import express from 'express';
-import session from 'express-session';
-import bcrypt from 'bcryptjs';
 import db from './db/database.js';
-
 
 const app = express();
 const PORT = 3000;
 
-//Настройки
-app.use(express.json('public'));
-//Проверка входа
-function requireAuth(req, res, next) {
-    if (!req.session.userID) {
-        return res.status(401).json({ error: 'Войдите, чтобы продолжить' });
-    }
-    next();
-}
-
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        sameSite: 'lax',
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    }
-}));
-
+// === Настройки ===
+app.use(express.json());
 app.use(express.static('public'));
 
-//Товары
+// === Товары ===
 app.get('/api/products', (req, res) => {
     const products = db.prepare('SELECT * FROM products').all();
     res.json(products);
 });
 
-// Регистрация
-app.post('/api/register', async (req, res) => {
-    const { name, email, password } = req.body;
+// === Проверка данных клиента ===
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!name || !email || !password) {
-        return res.status(400).json({ error: 'Заполните все поля' });
+function normalizePhone(phone) {
+    const digits = String(phone).replace(/\D/g, '');
+
+    if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
+        return '+7' + digits.slice(1);
     }
 
-    if (password.length < 8) {
-        return res.status(400).json({ error: 'Пароль должен быть не короче 8 символов' });
+    if (digits.length === 10) {
+        return '+7' + digits;
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
+    return null;
+}
 
-    const existingUser = db.prepare('SELECT id FROM users WHERE email =?').get(normalizedEmail);
-    if (existingUser) {
-        return res.status(409).json({error: 'Пользователь с такой почтой уже зарегистрирован'});
+// === Оформление заказа ===
+app.post('/api/orders', (req, res) => {
+    const { customer, items } = req.body;
+
+    if (!customer || typeof customer !== 'object') {
+        return res.status(400).json({ error: 'Укажите контактные данные' });
     }
 
-    const passwordHach = await bcrypt.hash(password, 10);
+    const name = String(customer.name ?? '').trim();
+    const phone = normalizePhone(customer.phone ?? '');
+    const email = String(customer.email ?? '').trim().toLowerCase();
+    const comment = String(customer.comment ?? '').trim();
 
-    const result = db.prepare(
-        'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)'
-    ).run(name.trim(), normalizedEmail, passwordHach);
-
-    req.session.userID = Number(result.lastInsertRowid);
-
-    res.status(201).json({
-        id: req.session.userID,
-        name: name.trim(),
-        email: normalizedEmail
-    });
-});
-
-// Вход
-app.post('/api/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({error: 'Введите почту и пароль'});
+    if (name.length < 2 || name.length > 50) {
+        return res.status(400).json({ error: 'Укажите имя' });
     }
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email.trim().toLowerCase());
-    const isPasswordValid = user && await bcrypt.compare(password, user.password_hash);
-
-    if(!isPasswordValid) {
-        return res.status(401).json({ error: 'Неверная почта или пароль'});
+    if (!phone) {
+        return res.status(400).json({ error: 'Укажите корректный номер телефона' });
     }
 
-    req.session.userID = user.id;
-
-    res.json({ id: user.id, name: user.name, email: user.email });
-});
-
-//Текущий пользователь
-app.get('/api/me', (req, res) => {
-    if (!req.session.userID) {
-        return res.status(401).json({ error: 'Не авторизирован' });
+    if (email && !EMAIL_PATTERN.test(email)) {
+        return res.status(400).json({ error: 'Проверьте адрес почты' });
     }
 
-    const user = db.prepare('SELECT id, name, email FROM users WHERE id = ?').get(req.session.userID);
-
-    if(!user) {
-        return res.status(401).json({ error: 'Не авторизирован' });
+    if (comment.length > 300) {
+        return res.status(400).json({ error: 'Комментарий слишком длинный' });
     }
-
-    res.json(user);
-});
-
-//Выход
-app.post('/api/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.clearCookie('connect.sid');
-        res.json({ ok: true });
-    });
-});
-
-//Оформление заказа
-app.post('/api/orders', requireAuth, (req, res) => {
-    const { items } = req.body;
 
     if (!Array.isArray(items) || items.length === 0) {
         return res.status(400).json({ error: 'Корзина пуста' });
@@ -148,9 +91,10 @@ app.post('/api/orders', requireAuth, (req, res) => {
     db.exec('BEGIN');
 
     try {
-        const orderResult = db.prepare(
-            'INSERT INTO orders (user_id, total) VALUES (?, ?)'
-        ).run(req.session.userID, total);
+        const orderResult = db.prepare(`
+            INSERT INTO orders (customer_name, customer_phone, customer_email, comment, total)
+            VALUES (?, ?, ?, ?, ?)
+        `).run(name, phone, email || null, comment || null, total);
 
         const orderId = Number(orderResult.lastInsertRowid);
 
@@ -173,7 +117,7 @@ app.post('/api/orders', requireAuth, (req, res) => {
     }
 });
 
-// Запуск
+// === Запуск ===
 app.listen(PORT, () => {
     console.log(`Сервер запущен: http://localhost:${PORT}`);
 });

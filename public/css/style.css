@@ -79,8 +79,6 @@ nav a:hover {
     background-color: var(--moss);
 }
 
-
-
 /* Гавный экран */
 .hero {
     display: grid;
@@ -346,31 +344,7 @@ nav a:hover {
     gap: 16px;
 }
 
-/* Формы входа и регистрации*/
-.auth-page {
-    display: flex;
-    justify-content: center;
-    padding: 40px 40px 80px;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    max-width: 420px;
-    padding: 40px;
-    background-color: var(--card);
-    border-radius: 24px;
-    box-shadow: 0 8px 24px rgba(46, 42, 36, 0.08);
-}
-
-.auth-title {
-    font-family: var(--font-heading);
-    font-size: 44px;
-    color: var(--moss);
-    text-align: center;
-}
+/* === Формы === */
 
 .form-field {
     display: flex;
@@ -380,7 +354,8 @@ nav a:hover {
     font-weight: 500;
 }
 
-.form-field input {
+.form-field input,
+.form-field textarea {
     padding: 12px 16px;
     border: 2px solid #E3DCCD;
     border-radius: 12px;
@@ -391,7 +366,8 @@ nav a:hover {
     transition: border-color 0.3s ease;
 }
 
-.form-field input:focus {
+.form-field input:focus,
+.form-field textarea:focus {
     outline: none;
     border-color: var(--moss);
 }
@@ -402,50 +378,24 @@ nav a:hover {
     color: var(--error);
 }
 
-.auth-submit {
-    width: 100%;
-    font-family: inherit;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.auth-submit:disabled {
-    opacity: 0.6;
-    cursor: wait;
-}
-
-.auth-switch {
-    font-size: 14px;
-    text-align: center;
-}
-
-.auth-switch a {
-    color: var(--moss);
-    text-decoration: underline;
-}
-
-/* === Пользователь в шапке === */
-.user-menu {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.user-name {
-    font-weight: 700;
-}
-
-.logout-btn {
-    border: none;
-    background: none;
-    font: inherit;
-    color: inherit;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 .checkout-message {
     margin-top: 16px;
     font-size: 14px;
     line-height: 1.5;
+}
+
+/* === Форма заказа === */
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-field textarea {
+    resize: vertical;
+}
+
+.form-field small {
+    font-weight: 400;
+    opacity: 0.7;
 }

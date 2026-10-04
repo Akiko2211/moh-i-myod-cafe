@@ -11,28 +11,12 @@ async function getProducts() {
     return response.json();
 }
 
-// Кто сейчас вошёл
-async function getCurrentUser() {
-    const response = await fetch('/api/me');
-
-    if (!response.ok) {
-        return null;
-    }
-
-    return response.json();
-}
-
-// Выход из аккаунта
-async function logout() {
-    await fetch('/api/logout', { method: 'POST' });
-}
-
 // Оформление заказа
-async function createOrder(items) {
+async function createOrder(order) {
     const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items })
+        body: JSON.stringify(order)
     });
 
     const result = await response.json();
