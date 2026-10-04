@@ -35,4 +35,36 @@ db.exec(`
     )
 `);
 
+db.exec(`
+    CREATE TABLE IF NOT EXISTS cafe_tables (
+        id    INTEGER PRIMARY KEY,
+        label TEXT    NOT NULL,
+        seats INTEGER NOT NULL,
+        shape TEXT    NOT NULL,
+        x     REAL    NOT NULL,
+        y     REAL    NOT NULL
+    )
+`);
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS bookings (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        table_id    INTEGER NOT NULL REFERENCES cafe_tables(id),
+        guest_name  TEXT    NOT NULL,
+        guest_phone TEXT    NOT NULL,
+        guest_email TEXT,
+        comment     TEXT,
+        guests      INTEGER NOT NULL,
+        starts_at   TEXT    NOT NULL,
+        ends_at     TEXT    NOT NULL,
+        status      TEXT    NOT NULL DEFAULT 'new',
+        created_at  TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+
+db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_bookings_table_time
+    ON bookings (table_id, starts_at)
+`);
+
 export default db;

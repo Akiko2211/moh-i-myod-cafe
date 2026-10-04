@@ -355,6 +355,7 @@ nav a:hover {
 }
 
 .form-field input,
+.form-field select,
 .form-field textarea {
     padding: 12px 16px;
     border: 2px solid #E3DCCD;
@@ -367,6 +368,7 @@ nav a:hover {
 }
 
 .form-field input:focus,
+.form-field select:focus,
 .form-field textarea:focus {
     outline: none;
     border-color: var(--moss);
@@ -398,4 +400,283 @@ nav a:hover {
 .form-field small {
     font-weight: 400;
     opacity: 0.7;
+}
+
+/* === Бронь столика === */
+.booking {
+    padding: 80px 40px;
+}
+
+.booking-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    grid-template-areas:
+        "when hall"
+        "contacts hall";
+    gap: 24px;
+    align-items: start;
+}
+
+.booking-when {
+    grid-area: when;
+}
+
+.booking-hall {
+    grid-area: hall;
+}
+
+.booking-contacts {
+    grid-area: contacts;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.booking-card {
+    padding: 24px;
+    background-color: var(--card);
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(46, 42, 36, 0.06);
+}
+
+.booking-step {
+    margin-bottom: 16px;
+    font-family: var(--font-heading);
+    font-size: 26px;
+}
+
+.booking-contacts .booking-step {
+    margin-bottom: 0;
+}
+
+.booking-when-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.booking-when-fields .form-field:first-child {
+    grid-column: 1 / -1;
+}
+
+/* --- Схема зала --- */
+.hall {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    container-type: inline-size;
+    overflow: hidden;
+    background-color: var(--cream);
+    border: 2px solid #E3DCCD;
+    border-radius: 20px;
+}
+
+.hall-tables {
+    position: absolute;
+    inset: 0;
+}
+
+.hall-decor {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6cqi;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6B655B;
+}
+
+.hall-windows {
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 7%;
+    background-color: #DCE6D0;
+    border-radius: 0 0 12px 12px;
+}
+
+.hall-bar {
+    right: 4%;
+    bottom: 6%;
+    width: 38%;
+    height: 14%;
+    background-color: #E3D3B4;
+    border-radius: 12px;
+}
+
+.hall-entrance {
+    bottom: 0;
+    left: 42%;
+    width: 14%;
+    height: 4.5%;
+    font-size: 2.2cqi;
+    color: var(--text);
+    background-color: var(--honey);
+    border-radius: 8px 8px 0 0;
+}
+
+.hall-table {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4cqi;
+    border: 2px solid var(--moss);
+    background-color: var(--card);
+    color: var(--moss);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.hall-table--round {
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+.hall-table--rect {
+    border-radius: 12px;
+}
+
+.hall-table--seats-2 {
+    width: 12%;
+}
+
+.hall-table--round.hall-table--seats-4 {
+    width: 15%;
+}
+
+.hall-table--rect.hall-table--seats-4 {
+    width: 18%;
+    aspect-ratio: 1.4;
+}
+
+.hall-table--rect.hall-table--seats-6 {
+    width: 24%;
+    aspect-ratio: 2;
+}
+
+.hall-table-label {
+    font-family: var(--font-heading);
+    font-size: max(16px, 4.4cqi);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.hall-table-seats {
+    font-size: 2.2cqi;
+}
+
+.hall-table.is-free:hover {
+    background-color: #EEF1E6;
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.hall-table.is-selected,
+.hall-table.is-selected:hover {
+    background-color: var(--moss);
+    color: var(--cream);
+}
+
+.hall-table.is-busy {
+    border-color: #C9C2B4;
+    background: repeating-linear-gradient(45deg, #EFE9DD, #EFE9DD 6px, #E3DCCD 6px, #E3DCCD 12px);
+    color: #9A9387;
+    cursor: not-allowed;
+}
+
+.hall-table.is-small {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.hall-table:focus-visible {
+    outline: 3px solid var(--honey);
+    outline-offset: 3px;
+}
+
+.hall-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+    list-style: none;
+    font-size: 14px;
+}
+
+.hall-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-dot {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--moss);
+    border-radius: 50%;
+    background-color: var(--card);
+}
+
+.legend-dot.is-selected {
+    background-color: var(--moss);
+}
+
+.legend-dot.is-small {
+    opacity: 0.45;
+}
+
+.legend-dot.is-busy {
+    border-color: #C9C2B4;
+    background: repeating-linear-gradient(45deg, #EFE9DD, #EFE9DD 3px, #E3DCCD 3px, #E3DCCD 6px);
+}
+
+.booking-selected {
+    margin-top: 12px;
+    font-weight: 500;
+}
+
+.booking-submit {
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.booking-submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.booking-message {
+    min-height: 21px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* На маленькой схеме прячем подпись «N мест» — остаётся крупный номер */
+@container (max-width: 480px) {
+    .hall-table-seats {
+        display: none;
+    }
+}
+
+.hall-error {
+    padding: 24px;
+}
+
+/* На узких экранах — всё в одну колонку */
+@media (max-width: 900px) {
+    .booking {
+        padding: 60px 16px;
+    }
+
+    .booking-form {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "when"
+            "hall"
+            "contacts";
+    }
 }

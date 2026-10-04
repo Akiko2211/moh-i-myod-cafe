@@ -117,3 +117,73 @@ export async function sendReceipt(order) {
 
     console.log(`Чек к заказу №${order.id} отправлен на ${order.customerEmail}`);
 }
+
+// === Подтверждение брони ===
+function formatDate(isoDate) {
+    const [year, month, day] = isoDate.split('-');
+    return `${day}.${month}.${year}`;
+}
+
+function buildBookingHtml(booking) {
+    const commentBlock = booking.comment
+        ? `<p style="margin:8px 0 0;"><strong>Комментарий:</strong> ${escapeHtml(booking.comment)}</p>`
+        : '';
+
+    return `
+        <div style="background:#F5EFE3;padding:32px 16px;font-family:Arial,sans-serif;color:#2E2A24;">
+            <div style="max-width:480px;margin:0 auto;background:#FFFDF8;border-radius:16px;padding:32px;">
+                <h1 style="margin:0 0 4px;font-family:Georgia,serif;color:#5B6B3A;">Мох и Мёд</h1>
+                <p style="margin:0 0 24px;color:#6B655B;">Столик забронирован — ждём вас!</p>
+
+                <p style="margin:0 0 8px;"><strong>Бронь №${booking.id}</strong></p>
+                <p style="margin:0 0 8px;"><strong>Дата:</strong> ${formatDate(booking.date)}</p>
+                <p style="margin:0 0 8px;"><strong>Время:</strong> ${booking.time} (на ${booking.durationHours} часа)</p>
+                <p style="margin:0 0 8px;"><strong>Столик:</strong> №${escapeHtml(booking.tableLabel)}</p>
+                <p style="margin:0 0 8px;"><strong>Гостей:</strong> ${booking.guests}</p>
+
+                <p style="margin:24px 0 0;"><strong>Имя:</strong> ${escapeHtml(booking.guestName)}</p>
+                <p style="margin:8px 0 0;"><strong>Телефон:</strong> ${escapeHtml(booking.guestPhone)}</p>
+                ${commentBlock}
+
+                <p style="margin:24px 0 0;color:#6B655B;font-size:13px;">Если планы изменятся, пожалуйста, позвоните нам.</p>
+            </div>
+        </div>
+    `;
+}
+
+function buildBookingText(booking) {
+    return [
+        'Мох и Мёд — столик забронирован, ждём вас!',
+        '',
+        `Бронь №${booking.id}`,
+        `Дата: ${formatDate(booking.date)}`,
+        `Время: ${booking.time} (на ${booking.durationHours} часа)`,
+        `Столик: №${booking.tableLabel}`,
+        `Гостей: ${booking.guests}`,
+        '',
+        `Имя: ${booking.guestName}`,
+        `Телефон: ${booking.guestPhone}`,
+        booking.comment ? `Комментарий: ${booking.comment}` : '',
+        '',
+        'Если планы изменятся, пожалуйста, позвоните нам.'
+    ].join('\n').trim();
+}
+
+export async function sendBookingConfirmation(booking) {
+    if (!booking.guestEmail) return;
+
+    if (!transporter) {
+        console.log(`Почта не настроена в .env — подтверждение брони №${booking.id} не отправлено`);
+        return;
+    }
+
+    await transporter.sendMail({
+        from: `"Мох и Мёд" <${MAIL_USER}>`,
+        to: booking.guestEmail,
+        subject: `Бронь №${booking.id} на ${formatDate(booking.date)} — Мох и Мёд`,
+        text: buildBookingText(booking),
+        html: buildBookingHtml(booking)
+    });
+
+    console.log(`Подтверждение брони №${booking.id} отправлено на ${booking.guestEmail}`);
+}
