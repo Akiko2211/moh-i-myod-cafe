@@ -1,6 +1,11 @@
 import { DatabaseSync } from "node:sqlite";
+import { fillDatabase } from './fill.js';
 
-const db = new DatabaseSync('cafe.db');
+// На Vercel менять файлы проекта нельзя — писать можно только в папку /tmp.
+// Там база временная: она очищается, когда сервер «засыпает».
+const DB_PATH = process.env.VERCEL ? '/tmp/cafe.db' : 'cafe.db';
+
+const db = new DatabaseSync(DB_PATH);
 db.exec(`
     CREATE TABLE IF NOT EXISTS products (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,5 +85,10 @@ db.exec(`
     CREATE INDEX IF NOT EXISTS idx_bookings_table_time
     ON bookings (table_id, starts_at)
 `);
+
+// На Vercel нет шага `npm run seed`, поэтому меню и столики заполняются при запуске
+if (process.env.VERCEL) {
+    fillDatabase(db);
+}
 
 export default db;

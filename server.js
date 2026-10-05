@@ -1,4 +1,5 @@
 import express from 'express';
+import { waitUntil } from '@vercel/functions';
 import db from './db/database.js';
 import {
     sendReceipt,
@@ -7,6 +8,12 @@ import {
     notifyAdminAboutBooking
 } from './mailer.js';
 import { validateContact } from './validation.js';
+
+// Серверы Vercel живут по UTC — переводим часы на время кафе,
+// чтобы бронь и время в чеке считались правильно
+if (process.env.VERCEL) {
+    process.env.TZ = 'Europe/Samara';
+}
 
 const app = express();
 const PORT = 3000;
@@ -94,13 +101,16 @@ app.post('/api/orders', (req, res) => {
             items: orderItems
         };
 
-        sendReceipt(orderForMail).catch(error => {
-            console.error(`Не удалось отправить чек к заказу №${orderId}:`, error.message);
-        });
-
-        notifyAdminAboutOrder(orderForMail).catch(error => {
-            console.error(`Не удалось уведомить кафе о заказе №${orderId}:`, error.message);
-        });
+        // waitUntil — письма досылаются уже после ответа пользователю
+        // (на Vercel без этого сервер может «уснуть» раньше, чем письмо уйдёт)
+        waitUntil(Promise.all([
+            sendReceipt(orderForMail).catch(error => {
+                console.error(`Не удалось отправить чек к заказу №${orderId}:`, error.message);
+            }),
+            notifyAdminAboutOrder(orderForMail).catch(error => {
+                console.error(`Не удалось уведомить кафе о заказе №${orderId}:`, error.message);
+            })
+        ]));
     } catch (error) {
         db.exec('ROLLBACK');
         console.error(error);
@@ -276,13 +286,14 @@ app.post('/api/bookings', (req, res) => {
             comment: contact.comment
         };
 
-        sendBookingConfirmation(bookingForMail).catch(error => {
-            console.error(`Не удалось отправить подтверждение брони №${bookingId}:`, error.message);
-        });
-
-        notifyAdminAboutBooking(bookingForMail).catch(error => {
-            console.error(`Не удалось уведомить кафе о брони №${bookingId}:`, error.message);
-        });
+        waitUntil(Promise.all([
+            sendBookingConfirmation(bookingForMail).catch(error => {
+                console.error(`Не удалось отправить подтверждение брони №${bookingId}:`, error.message);
+            }),
+            notifyAdminAboutBooking(bookingForMail).catch(error => {
+                console.error(`Не удалось уведомить кафе о брони №${bookingId}:`, error.message);
+            })
+        ]));
     } catch (error) {
         db.exec('ROLLBACK');
         console.error(error);
@@ -291,6 +302,12 @@ app.post('/api/bookings', (req, res) => {
 });
 
 // === Запуск ===
-app.listen(PORT, () => {
-    console.log(`Сервер запущен: http://localhost:${PORT}`);
-});
+// На своём компьютере запускаем сервер сами.
+// На Vercel сервер запускает сама платформа — ей нужно только отдать app.
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Сервер запущен: http://localhost:${PORT}`);
+    });
+}
+
+export default app;

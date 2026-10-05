@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Akiko2211/moh-i-myod-cafe#readme",
   "dependencies": {
+    "@vercel/functions": "^3.9.11",
     "express": "^5.2.1",
     "nodemailer": "^10.0.14"
   },
